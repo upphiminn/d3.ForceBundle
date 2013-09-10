@@ -14,12 +14,12 @@ The input for the algorithm is a simple node-link diagram of a graph with nodes 
 A certain number of parameters have been fixed to specific optimized values as found through experimentation by the authors. These include the spring constants **K** (=0.1), which controls the amount of bundling by controling the stiffness of edges. The number of iterations for simulating force interactions **I** (=60) and the number of cycles of subdivision-force simulation iterations **C** (=6). Moreover, the initial number of division points **P** is set to 1 and the rate at which it increases set to 2. The rate of the number of iterations **I** decreases each cycle is set to **2/3**.
 All these parameters can be changed nonetheless if really needed by using the following methods:
 
-- *bundling_stiffness ([new bundling stiffness: **float value**])*
-- *iterations([new number of iterations to execute each cycle: **int value**])*
-- *iterations_rate([new decrease rate for iteration number in each cycle: **float value**])*
-- *cycles ([new number of cycles to execute: **int value**])*
-- *subdivision_points_seed([new number subdivision points in first cycle: **int value**])*
-- *subdivision_rate([new rate of subdivision each cycle: **float value**])*
+- *bundling_stiffness ([new bundling stiffness: float value])*
+- *iterations([new number of iterations to execute each cycle: int value])*
+- *iterations_rate([new decrease rate for iteration number in each cycle: float value])*
+- *cycles ([new number of cycles to execute: int value])*
+- *subdivision_points_seed([new number subdivision points in first cycle: int value])*
+- *subdivision_rate([new rate of subdivision each cycle: float value])*
 
 ##### Tuning Parameters For Your Specific Graph
 
