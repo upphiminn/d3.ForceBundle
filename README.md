@@ -98,7 +98,11 @@ Plotting can be done by using standard *d3* methods i.e. drawing lines between e
         });
         
 ##Example
-##### For source code see **example/airline_routes.html**.
+#### Live Demo
+[Live Demo on bl.ocks.org](http://bl.ocks.org/upphiminn/6515478)
+
+
+OR see source code in **example/airline_routes.html**.
 ##### Node-Link
 ![](readme_img/airline_node_link_graph.png) 
 ##### After FDEB 
