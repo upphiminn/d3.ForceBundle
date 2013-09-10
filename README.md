@@ -78,7 +78,7 @@ The algorithm outputs an array of arrays of subdivision points obtained on the l
 	var fbundling = d3.ForceEdgeBundling().step_size(0.2).compatibility_threshold(0.9).nodes(node_data).edges(edge_data);
 	var results   = fbundling();	  
 	
-###How to Plot
+###How To Plot
 Plotting can be done by using standard *d3* methods i.e. drawing lines between each of the subdivision subpoints for each the initial graph edges. Since there is no support for advanced blending modes in **SVG** yet we use the *stroke-opacity* to mark overlapping segments.
 
 		var d3line = d3.svg.line()

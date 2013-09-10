@@ -283,12 +283,8 @@ Author: Corneliu S. (github.com/upphiminn)
 			
 			initialize_edge_subdivisions();
 			initialize_compatibility_lists();
-			//console.log(subdivision_points_for_edge);
 			update_edge_divisions(P);
 			compute_compatibility_lists();
-			// console.warn("@@@@@@@@@@@@WTFWTFWTFWTF");
-			// console.log(subdivision_points_for_edge);
-			// return subdivision_points_for_edge;
 			for(var cycle=0; cycle < C; cycle++){
 				for (var iteration = 0; iteration < I; iteration++){
 					var forces = [];
