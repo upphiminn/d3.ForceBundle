@@ -107,7 +107,7 @@ Plotting can be done by using standard *d3* methods i.e. drawing lines between e
 
 ## Future Extenions
 
-- Barnes Hunt methods to optimize force calculations. 
+- Barnes-Hut methods to optimize force calculations. 
 - Use a color gradient to color edge subsegments with respect to number of overlapping subedges.
 - Add edge smoothing support for subdivision points using a Gaussian kernels. 
 - Automatical intialization with optiomum step size with respect to given graph.
