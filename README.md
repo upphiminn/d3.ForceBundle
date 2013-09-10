@@ -29,7 +29,8 @@ The **most important parameter** is the **initial step size** used to move the s
 
 
 ##Usage
-
+###Import The Plugin 
+	<script type="text/javascript" src="d3-ForceEdgeBundling.js"></script>
 ###Input Data
 ####Node Data
 The Nodes and their positions are stored by their id in a basic dictionary.
