@@ -109,7 +109,7 @@ OR see source code in **example/airline_routes.html**.
 ![](readme_img/airline_graph.png) 
 
 
-## Future Extenions
+## Future Extentions
 
 - Barnes-Hut methods to optimize force calculations. 
 - Use a color gradient to color edge subsegments with respect to number of overlapping subedges.
