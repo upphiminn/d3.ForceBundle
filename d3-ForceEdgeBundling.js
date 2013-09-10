@@ -1,20 +1,27 @@
+/* 
+FDEB algorithm implementation [www.win.tue.nl/~dholten/papers/forcebundles_eurovis.pdf].
+
+Author: Corneliu S. (github.com/upphiminn)
+2013
+
+*/
 (function(){
 	
-	d3.force_edge_bundling = function(){
+	d3.ForceEdgeBundling = function(){
 		var data_nodes = {}, 		// {'nodeid':{'x':,'y':},..}
 			data_edges = [], 		// [{'source':'nodeid1', 'target':'nodeid2'},..]
 			compatibility_list_for_edge = [],
 			subdivision_points_for_edge = [],
 			K = 0.1, 				// global bundling constant controling edge stiffness
-			S_initial = 0.00001, 	//0.17	// init. distance to move points
+			S_initial = 0.1, 		// init. distance to move points
 			P_initial = 1, 			// init. subdivision number
 			P_rate    = 2,			// subdivision rate increase
 			C = 6, 					// number of cycles to perform
-			I_initial = 50, 		// init. number of iterations for cycle
-			I_rate = 0.6666667, 		// rate at which iteration number decreases i.e. 2/3
-			compatibility_threshold = 0.1,//0.6
+			I_initial = 90, 		// init. number of iterations for cycle
+			I_rate = 0.6666667,     // rate at which iteration number decreases i.e. 2/3
+			compatibility_threshold = 0.6,
 			invers_quadratic_mode  = false,
-			eps = 1e-7;
+			eps = 1e-6;
 			 
 
 		/*** Geometry Helper Methods ***/
@@ -28,17 +35,17 @@
 		}
 
 		function edge_length(e){
-			return Math.sqrt(Math.pow(data_nodes[e.source].x-data_nodes[e.target].x,2) +
-						     Math.pow(data_nodes[e.source].y-data_nodes[e.target].y,2));
+			return Math.sqrt(Math.pow(data_nodes[e.source].x-data_nodes[e.target].x, 2) +
+						     Math.pow(data_nodes[e.source].y-data_nodes[e.target].y, 2));
 		}
 
 		function custom_edge_length(e){
-			return Math.sqrt(Math.pow(e.source.x - e.target.x,2) + Math.pow(e.source.y - e.target.y,2));
+			return Math.sqrt(Math.pow(e.source.x - e.target.x, 2) + Math.pow(e.source.y - e.target.y, 2));
 		}
 
 		function edge_midpoint(e){
-			var middle_x = (data_nodes[e.source].x + data_nodes[e.target].x)/2.0;
-			var middle_y = (data_nodes[e.source].y + data_nodes[e.target].y)/2.0;
+			var middle_x = (data_nodes[e.source].x + data_nodes[e.target].x) / 2.0;
+			var middle_y = (data_nodes[e.source].y + data_nodes[e.target].y) / 2.0;
 			return {'x': middle_x, 'y': middle_y};
 		}
 
@@ -47,14 +54,13 @@
 			for(var i = 1; i < subdivision_points_for_edge[e_idx].length; i++){
 				var segment_length = euclidean_distance(subdivision_points_for_edge[e_idx][i],
 														subdivision_points_for_edge[e_idx][i-1]);
-
 				length += segment_length;
 			}
 			return length;
 		}
 
 		function euclidean_distance(p, q){
-			return Math.sqrt(Math.pow(p.x-q.x,2) + Math.pow(p.y-q.y,2));
+			return Math.sqrt(Math.pow(p.x-q.x, 2) + Math.pow(p.y-q.y, 2));
 		}
 
 		function project_point_on_line(p, Q)
@@ -88,10 +94,7 @@
 
 		function filter_self_loops(edgelist){
 			var filtered_edge_list = [];
-			//console.warn(data_nodes);
 			for(var e=0; e < edgelist.length; e++){
-				//console.log(edgelist[e].source);
-				//console.warn(data_nodes[edgelist[e].source]);
 				if(data_nodes[edgelist[e].source].x != data_nodes[edgelist[e].target].x  &&
 				   data_nodes[edgelist[e].source].y != data_nodes[edgelist[e].target].y ){ //or smaller than eps
 					filtered_edge_list.push(edgelist[e]);
@@ -106,13 +109,9 @@
 		/*** Force Calculation Methods ***/
 		function apply_spring_force(e_idx, i, kP){
 
-
-			
 			var prev = subdivision_points_for_edge[e_idx][i-1];
 			var next = subdivision_points_for_edge[e_idx][i+1];
 			var crnt = subdivision_points_for_edge[e_idx][i];
-			// if(prev == undefined || crnt == undefined || next == undefined)
-			// 	console.log(subdivision_points_for_edge[e_idx] + ' - - - ' + e_idx);
 
 			var x = prev.x - crnt.x + next.x - crnt.x;
 			var y = prev.y - crnt.y + next.y - crnt.y;
@@ -136,26 +135,12 @@
 				if((Math.abs(force.x) > eps)||(Math.abs(force.y) > eps)){
 				
 			    var diff = ( 1 / Math.pow(custom_edge_length({'source':subdivision_points_for_edge[compatible_edges_list[oe]][i],
-																			   'target':subdivision_points_for_edge[e_idx][i]}),1));
+															  'target':subdivision_points_for_edge[e_idx][i]}),1));
 				
-			    // if(Math.abs(diff*S) > 1){
-			    // 	diff = 1/S;
-			    // }
 				sum_of_forces.x += force.x*diff;
-				
 				sum_of_forces.y += force.y*diff;
 				}
-				// if(e_idx == 2043){
-				// console.warn('OTHER' + compatible_edges_list[oe]);
-				// console.log(subdivision_points_for_edge[compatible_edges_list[oe]][i]);
-				// console.warn('ME' + e_idx);
-				// console.log(subdivision_points_for_edge[e_idx][i]);
-				// console.log('--------');
-				// console.warn(sum_of_forces);
-				// }
-			} //compatibility / cust_edge_len^2
-			  // compatbility / cust_len / cust_ed_len^2 - inv quadratic
-			// console.log(sum_of_forces);
+			} 
 			return sum_of_forces;
 		}
 
@@ -172,12 +157,10 @@
             	
             	resulting_force.x  	= S*(spring_force.x + electrostatic_force.x);
             	resulting_force.y  	= S*(spring_force.y + electrostatic_force.y);
-            	//console.warn(electrostatic_force)
-            	// subdivision_points_for_edge[e_idx][i].x += S*(spring_force.x + electrostatic_force.x);
-            	// subdivision_points_for_edge[e_idx][i].y += S*(spring_force.y + electrostatic_force.y);
+
             	resulting_forces_for_subdivision_points.push(resulting_force);
             }
-            resulting_forces_for_subdivision_points.push({'x':0,'y':0});
+            resulting_forces_for_subdivision_points.push({'x':0, 'y':0});
             return resulting_forces_for_subdivision_points;
 		}
 		/*** ********************** ***/
@@ -193,7 +176,6 @@
 				}else{
 
 					var divided_edge_length = compute_divided_edge_length(e_idx);
-					//console.warn(divided_edge_length);
 					var segment_length  	= divided_edge_length / (P+1);
 					var current_segment_length = segment_length;
 					var new_subdivision_points = [];
@@ -209,8 +191,8 @@
 
 							new_subdivision_point_x += percent_position*(subdivision_points_for_edge[e_idx][i].x - subdivision_points_for_edge[e_idx][i-1].x);
 							new_subdivision_point_y += percent_position*(subdivision_points_for_edge[e_idx][i].y - subdivision_points_for_edge[e_idx][i-1].y);
-							new_subdivision_points.push({'x':new_subdivision_point_x, 
-														 'y':new_subdivision_point_y });
+							new_subdivision_points.push( {'x':new_subdivision_point_x, 
+														  'y':new_subdivision_point_y });
 							
 							old_segment_length     -= current_segment_length;
 							current_segment_length 	= segment_length;
@@ -262,23 +244,11 @@
 		function visibility_compatibility(P, Q){
 			return Math.min(edge_visibility(P,Q), edge_visibility(Q,P));
 		}
-		function semantic_compatibility(P, Q){
-			//console.warn("@@ " + P.start_chain + ' ' + Q.start_chain);
-			if(P.start_chain != null && P.end_chain!=null && Q.start_chain != null && Q.end_chain!=null){
-				if(P.start_chain == Q.start_chain && Q.end_chain == P.end_chain){
-
-				return 1;
-				}
-				if(P.start_chain == Q.end_chain && Q.start_chain == P.end_chain){
-				return 1;
-				}
-			}
-			return 0;
-		}
 
 		function compatibility_score(P, Q){
 			var result = (angle_compatibility(P,Q) * scale_compatibility(P,Q) * 
-				    	  position_compatibility(P,Q) * semantic_compatibility(P,Q));//* visibility_compatibility(P,Q));
+				    	  position_compatibility(P,Q) * visibility_compatibility(P,Q));
+
 			return result;
 		}
 
@@ -301,7 +271,6 @@
 					}
 				}
 			}
-			//console.log(compatibility_list_for_edge);
 		}
 
 		/*** ************************ ***/
@@ -326,17 +295,12 @@
 					for(var edge = 0; edge < data_edges.length; edge++){
 						forces[edge] = apply_resulting_forces_on_subdivision_points(edge, P, S);
 					}
-					//console.warn(forces)
 					for(var e = 0; e < data_edges.length; e++){
 						for(var i=0; i < P + 1;i++){
-							//console.log('-2-2-2-')
-							//console.warn(forces[e])
 							subdivision_points_for_edge[e][i].x += forces[e][i].x;
 							subdivision_points_for_edge[e][i].y += forces[e][i].y;
 						}
 				    }
-
-				
 				}
 				//prepare for next cycle
 				S = S / 2;
@@ -369,10 +333,7 @@
 				return data_edges;
 			}
 			else{
-				//data_edges = ll;
 				data_edges = filter_self_loops(ll); //remove edges to from to the same point
-				//console.log('-_-');
-				//console.log(data_edges);
 			}
 			return forcebundle;
 		}

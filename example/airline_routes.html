@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>FDEB US Airline Routes Example</title>
+
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+		<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../d3-ForceEdgeBundling.js"></script>
+	</head>
+
+	<body>
+		<div id="svg">
+		</div>
+	<script>
+	$(function(){
+		d3.xml("bundling_data/airlines.xml", function(xml) {
+		  //Transform the XML data into a proper format used by the algorithm
+		  var raw_edges = xml.documentElement.getElementsByTagName("edge");
+		  var raw_nodes = xml.documentElement.getElementsByTagName("node");
+		  var eedges = [];
+		  var nnodes = {};
+		  var min_x = Number.MAX_VALUE;
+		  var max_x = 0;
+		  var min_y = Number.MAX_VALUE;
+		  var max_y = 0;
+
+		  for(var i = 0; i < raw_nodes.length; i++){
+		  	var key = raw_nodes[i].getAttribute('id');
+		  	var x   = Math.abs(parseFloat(raw_nodes[i].childNodes[1].firstChild.nodeValue));
+		  	var name = raw_nodes[i].childNodes[3].firstChild.nodeValue;
+		  	var y   = Math.abs(parseFloat(raw_nodes[i].childNodes[5].firstChild.nodeValue));
+		  	
+		  	nnodes[key] = {'x':x, 'y':y};
+		  	min_x = Math.min(min_x, x);
+		  	max_x = Math.max(max_x, x);
+		  	min_y = Math.min(min_y, y);
+		  	max_y = Math.max(max_y, y);
+		  }
+
+		  for(var i = 0; i < raw_edges.length; i++){
+		  	eedges.push({'source':raw_edges[i].getAttribute('source'), 
+		  		  		 'target':raw_edges[i].getAttribute('target')});
+		 }
+
+		 console.log('Nodes', nnodes); 
+		 console.log('Edges', eedges);
+		 
+		 var new_scale_x = d3.scale.linear().domain([min_x,max_x]).range([1000,50]);
+		 var new_scale_y = d3.scale.linear().domain([min_y, max_y]).range([560,50]);
+		 for(var i = 0; i < raw_nodes.length; i++){
+		  	nnodes[i].x = new_scale_x(nnodes[i].x);
+		  	nnodes[i].y = new_scale_y(nnodes[i].y);
+		  }
+
+		//Run the FDEB algorithm using default values on the data
+		var fbundling = d3.ForceEdgeBundling().nodes(nnodes).edges(eedges);
+		var results   = fbundling();
+ 
+        var svg = d3.select("#svg").append("svg")
+            .attr("width", 1200)
+            .attr("height", 600);
+
+        svg = svg.append('g');
+        	  svg.append('rect').attr({'fill': '#111155', 'width': 1200, 'height':600});
+              svg.attr('transform', 'translate(20, 20)');
+        
+
+		var d3line = d3.svg.line()
+                        .x(function(d){return d.x;})
+                        .y(function(d){return d.y;})
+                        .interpolate("linear");
+        //plot the data
+        for(var i = 0; i < results.length; i++){
+	        svg.append("path").attr("d", d3line(results[i]))
+	            .style("stroke-width", 1)
+	            .style("stroke", "#ff2222")
+	            .style("fill", "none")
+	            .style('stroke-opacity',0.115);
+        }
+
+        //draw nodes
+        svg.selectAll('.node')
+           .data(d3.entries(nnodes))
+           .enter()
+           .append('circle')
+           .classed('node', true)
+           .attr({'r': 2, 'fill':'#ffee00'})
+           .attr('cx', function(d){ return d.value.x;})
+           .attr('cy', function(d){ return d.value.y;});
+
+
+		});
+    })
+	</script>
+	</body>
+</html>
