@@ -404,9 +404,9 @@ Author: Corneliu S. (github.com/upphiminn)
 			return forcebundle;
 		}
 
-		forcebundle.compatbility_threshold = function(t){
+		forcebundle.compatibility_threshold = function(t){
 			if(arguments.length == 0){
-				return compatbility_threshold;
+				return compatibility_threshold;
 			}
 			else{
 				compatibility_threshold = t;
