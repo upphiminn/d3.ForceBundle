@@ -35,6 +35,10 @@ Author: Corneliu S. (github.com/upphiminn)
 		}
 
 		function edge_length(e){
+			// handling nodes that are on the same location, so that K/edge_length != Inf
+			if (Math.abs(data_nodes[e.source].x-data_nodes[e.target].x) < eps && 
+			Math.abs(data_nodes[e.source].y-data_nodes[e.target].y) < eps)
+				return eps;
 			return Math.sqrt(Math.pow(data_nodes[e.source].x-data_nodes[e.target].x, 2) +
 						     Math.pow(data_nodes[e.source].y-data_nodes[e.target].y, 2));
 		}
