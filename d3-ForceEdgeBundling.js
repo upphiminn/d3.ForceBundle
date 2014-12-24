@@ -304,7 +304,7 @@ Author: Corneliu S. (github.com/upphiminn)
 				}
 				//prepare for next cycle
 				S = S / 2;
-				P = P * 2;
+				P = P * P_rate;
 				I = I_rate * I;
 				
 				update_edge_divisions(P);
