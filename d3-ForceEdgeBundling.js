@@ -99,7 +99,7 @@ Author: Corneliu S. (github.com/upphiminn)
 		function filter_self_loops(edgelist){
 			var filtered_edge_list = [];
 			for(var e=0; e < edgelist.length; e++){
-				if(data_nodes[edgelist[e].source].x != data_nodes[edgelist[e].target].x  ||
+				if(data_nodes[edgelist[e].source].x != data_nodes[edgelist[e].target].x  &&
 				   data_nodes[edgelist[e].source].y != data_nodes[edgelist[e].target].y ){ //or smaller than eps
 					filtered_edge_list.push(edgelist[e]);
 
