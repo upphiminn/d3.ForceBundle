@@ -12,6 +12,7 @@ Author: Corneliu S. (github.com/upphiminn)
 			data_edges = [], 		// [{'source':'nodeid1', 'target':'nodeid2'},..]
 			compatibility_list_for_edge = [],
 			subdivision_points_for_edge = [],
+			rejected_edges = [],    	// list of indices of the edges filtered out by the filter_self_loops
 			K = 0.1, 				// global bundling constant controling edge stiffness
 			S_initial = 0.1, 		// init. distance to move points
 			P_initial = 1, 			// init. subdivision number
@@ -103,6 +104,8 @@ Author: Corneliu S. (github.com/upphiminn)
 				   data_nodes[edgelist[e].source].y != data_nodes[edgelist[e].target].y ){ //or smaller than eps
 					filtered_edge_list.push(edgelist[e]);
 
+				} else {
+					rejected_edges.push(e);
 				}
 			}
 
@@ -312,6 +315,12 @@ Author: Corneliu S. (github.com/upphiminn)
 				console.log('P' + P);
 				console.log('S' + S);
 			}
+
+			// Add rejected edges as undefined values at the same positions as in original data
+			rejected_edges.forEach(function(index) {
+				subdivision_points_for_edge.splice(index, 0, undefined);
+			});
+
 			return subdivision_points_for_edge;
 		}
 		/*** ************************ ***/
