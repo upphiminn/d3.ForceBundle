@@ -301,9 +301,7 @@ Author: Corneliu S. (github.com/upphiminn)
         function compute_compatibility_lists() {
             for (e = 0; e < data_edges.length - 1; e++) {
                 for (oe = e + 1; oe < data_edges.length; oe++) { // don't want any duplicates
-                    if (e == oe)
-                        continue;
-                    else {
+                    {
                         if (are_compatible(data_edges[e], data_edges[oe])) {
                             compatibility_list_for_edge[e].push(oe);
                             compatibility_list_for_edge[oe].push(e);
