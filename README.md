@@ -28,8 +28,8 @@ Two parameters are **essential** for tuning the algorithm to produce usable diag
 The **most important parameter** is the **initial step size** used to move the subdivision points after forces have been computed. This depends on both the scale of the graph and the number of edges and nodes contained. Having a step size which is too low will produce node-link like graphs while too high values will over distort edges. This can be set using the ***step_size*** function and passing your new step float size value. The default value is set to **0.1**.
 
 
-##Usage
-###Import The Plugin 
+## Usage
+### Import The Plugin 
 ```html
 	<script type="text/javascript" src="d3-ForceEdgeBundling.js"></script>
 ```
