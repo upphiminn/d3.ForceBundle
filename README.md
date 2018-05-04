@@ -1,5 +1,5 @@
-#d3.ForceBundle 
-*Corneliu S.*
+# d3.ForceBundle 
+
 ##### Javascript Force Edge Bundling for d3.js
 ![](readme_img/comp.png) 
 ---
@@ -10,7 +10,7 @@ Node-link graphs with many edges and nodes suffer from visual clutter, edge-bund
 **Force edge bundling** **[3]** works by modelling edges between nodes as flexible springs which can attract each other if certain geometrical compatibility criterions are met. 
 The input for the algorithm is a simple node-link diagram of a graph with nodes and edges. In order to change the shape of the basic straight line edges between nodes, the algorithm proceeds by subdividing edges into segments. Attraction *spring* forces are simulated between each pair of consecutive subdivision points on the same graph-edge. Moreover, attraction *electrostatic* forces are computed between subpoints of different edges which are geometrically compatible. The combined force acting on each subdivision point is computed and the points are moved a certain step size in the direction of the force. The force-simulation on these sub-points is repeted a certain amout of iterations. After the end of a cycle of iterations the resulting graph-edges are divided again in smaller segements and the whole process repeats itself until the end cycle is reached. It's important to note that the position of original node-points are fixed throughout the simulation.
 #### Parameters Tuning
-#####Fixed Parameters 
+##### Fixed Parameters 
 A certain number of parameters have been fixed to specific optimized values as found through experimentation by the authors. These include the spring constants **K** (=0.1), which controls the amount of bundling by controling the stiffness of edges. The number of iterations for simulating force interactions **I** (=60) and the number of cycles of subdivision-force simulation iterations **C** (=6). Moreover, the initial number of division points **P** is set to 1 and the rate at which it increases set to 2. The rate of the number of iterations **I** decreases each cycle is set to **2/3**.
 All these parameters can be changed nonetheless if really needed by using the following methods:
 
@@ -33,68 +33,69 @@ The **most important parameter** is the **initial step size** used to move the s
 ```html
 	<script type="text/javascript" src="d3-ForceEdgeBundling.js"></script>
 ```
-###Input Data
-####Node Data
+### Input Data
+#### Node Data
 The Nodes and their positions are stored by their id in a basic dictionary.
 ```javascript
 var node_data = {
-	"0":{"x":922.24444, "y":347.29444},
-	"1":{"x":814.42222, "y":409.16111},
-	"2":{"x":738, "y":427.33333000000005},
-	"3":{"x":784.5, "y":381.33333},
-	"4":{"x":1066.09167, "y":350.40278},
-	"5":{"x":925.4861099999999, "y":313.275}
-	}
+	"0": {"x":922.24444, "y":347.29444},
+	"1": {"x":814.42222, "y":409.16111},
+	"2": {"x":738, "y":427.33333000000005},
+	"3": {"x":784.5, "y":381.33333},
+	"4": {"x":1066.09167, "y":350.40278},
+	"5": {"x":925.4861099999999, "y":313.275}
+}
 ```
-####Edge Data
+#### Edge Data
 The edges are stored in an array, with each edge being represtend by an object with a *source* and *target* field. The id of the endpoints nodes are used as values. 
 ```javascript
 var edge_data = [{"source":"0", "target":"1"}, {"source":"4", "target":"2"}, {"source":"0", "target":"3"}, {"source":"0","target":"4"}, {"source":"2", "target":"5"}, {"source":"3", "target":"2"}, {"source":"3", "target":"4"}]
 ```
 	
-###Output Data
+### Output Data
 The algorithm outputs an array of arrays of subdivision points obtained on the last cycle of the algorithm. For each initial edge we now have an array of subpoints. See dumbed-down example output below:
 ```javascript	
-	[
-		[{"x":598.84446872426, "y":345.9168478350515},
-		{"x":598.8966169857991, "y":342.6143388013737},
-		{"x":598.9447663612947, "y":339.5650761251721},
-		{"x":598.9889739987847, "y":336.00915574486953}],
-		
-		[{"x":599.0255639503467, "y":332.7064433315037},
-		{"x":599.0458427562561, "y":329.649667740391},
-		{"x":599.0688393833738, "y":326.1832146974663},
-		{"x":599.0815403651777, "y":322.79784918535125}],
+[
+	[{"x":598.84446872426, "y":345.9168478350515},
+	{"x":598.8966169857991, "y":342.6143388013737},
+	{"x":598.9447663612947, "y":339.5650761251721},
+	{"x":598.9889739987847, "y":336.00915574486953}],
+
+	[{"x":599.0255639503467, "y":332.7064433315037},
+	{"x":599.0458427562561, "y":329.649667740391},
+	{"x":599.0688393833738, "y":326.1832146974663},
+	{"x":599.0815403651777, "y":322.79784918535125}],
 		  
-		 [{"x":599.093286694284, "y":319.49494996957446},
-		  {"x":599.0826911541287, "y":316.20380716501853},
-		  {"x":599.0720260264579, "y":312.8891427199991},
-		  {"x":599.0626270188833, "y":309.96251327852605}],
+	[{"x":599.093286694284, "y":319.49494996957446},
+	 {"x":599.0826911541287, "y":316.20380716501853},
+	 {"x":599.0720260264579, "y":312.8891427199991},
+	 {"x":599.0626270188833, "y":309.96251327852605}],
 		  
-		 [{"x":599.0490564253139, "y":306.2833476821561},
-		  {"x":599.0143146564005, "y":303.088731096524},
-		  {"x":598.9769445742103, "y":299.67789993507586},
-		  {"x":598.9402957673196, "y":296.5373242419396}]
-        ]
+	[{"x":599.0490564253139, "y":306.2833476821561},
+	 {"x":599.0143146564005, "y":303.088731096524},
+	 {"x":598.9769445742103, "y":299.67789993507586},
+	 {"x":598.9402957673196, "y":296.5373242419396}]
+]
 ```
-###Running the algorithm
-####With Default Parameters Values:
+### Running the algorithm
+#### With Default Parameters Values:
 ```javascript
 	var fbundling = d3.ForceEdgeBundling()
 				.nodes(node_data)
 				.edges(edge_data);
 	var results   = fbundling();	
-```	
-####With Custom Parameters Values
+```
+
+#### With Custom Parameters Values
 ```javascript
 	var fbundling = d3.ForceEdgeBundling()
 				.step_size(0.2)
 				.compatibility_threshold(0.9)
 				.nodes(node_data)
 				.edges(edge_data);
-	var results   = fbundling();	  
+	var results = fbundling();	  
 ```	
-###How To Plot
+### How To Plot
 Plotting can be done by using standard *d3* methods i.e. drawing lines between each of the subdivision subpoints for each the initial graph edges. Since there is no support for advanced blending modes in **SVG** yet we use the *stroke-opacity* to mark overlapping segments.
 ```javascript
 	var d3line = d3.svg.line()
@@ -113,7 +114,7 @@ Plotting can be done by using standard *d3* methods i.e. drawing lines between e
             	.style('stroke-opacity',0.15); //use opacity as blending
         });
 ```        
-##Example
+## Example
 #### Live Demo
 [Live Demo on bl.ocks.org](http://bl.ocks.org/upphiminn/6515478)
 
